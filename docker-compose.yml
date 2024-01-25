@@ -20,6 +20,7 @@ services:
       #ports:
       #- 80:80
     volumes:
+      - ./conf.d/php/php.ini:/usr/local/etc/php/php.ini:ro
       - wordpress:/var/www/html
     restart: always
     environment:
