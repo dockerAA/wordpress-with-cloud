@@ -1,0 +1,51 @@
+services:
+  db:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10.6.4-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8.0.27
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=KuscpLEPdLDtGqx3mdgH      
+      - MYSQL_DATABASE=berkplastik
+      - MYSQL_USER=wp-bp
+      - MYSQL_PASSWORD=xeLj7NKMu5VX5zxL4tiO
+    expose:
+      - 3306
+  wordpress:
+    image: wordpress:php8.3-fpm  
+      #ports:
+      #- 80:80
+    volumes:
+      - ./conf.d/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - wordpress:/var/www/html
+    restart: always
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wp-bp
+      - WORDPRESS_DB_PASSWORD=xeLj7NKMu5VX5zxL4tiO     
+      - WORDPRESS_DB_NAME=berkplastik
+  webserver:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: always
+    volumes:
+      - ./conf.d/nginx/:/etc/nginx/conf.d/:ro
+      - ./conf.d/certbot/www/:/var/www/certbot/:ro
+      - ./conf.d/certbot/conf/:/etc/nginx/ssl/:ro  
+      - wordpress:/var/www/html
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./conf.d/certbot/www/:/var/www/certbot/:rw
+      - ./conf.d/certbot/conf/:/etc/letsencrypt/:rw
+      - ./conf.d/certbot/log/:/var/log/letsencrypt/:rw
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email alperalbayrak@iyte.edu.tr -d berkplastik.francecentral.cloudapp.azure.com --non-interactive --agree-tos
+volumes:
+  db_data:
+  wordpress:

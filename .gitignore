@@ -1,0 +1,4 @@
+#git ignore config
+conf.d/certbot/conf
+conf.d/certbot/log
+conf.d/certbot/www
