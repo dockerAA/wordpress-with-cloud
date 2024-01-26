@@ -1,3 +1,5 @@
+version: '3.4'
+
 services:
   db:
     # We use a mariadb image which supports both amd64 & arm64 architecture
@@ -8,11 +10,15 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     restart: always
+    secrets:
+      - mysql_root_password
+      - mysql_user
+      - mysql_password
     environment:
-      - MYSQL_ROOT_PASSWORD=KuscpLEPdLDtGqx3mdgH      
       - MYSQL_DATABASE=berkplastik
-      - MYSQL_USER=wp-bp
-      - MYSQL_PASSWORD=xeLj7NKMu5VX5zxL4tiO
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/mysql_root_password
+      - MYSQL_USER_FILE=/run/secrets/mysql_user
+      - MYSQL_PASSWORD_FILE=/run/secrets/mysql_password
     expose:
       - 3306
   wordpress:
@@ -23,11 +29,14 @@ services:
       - ./conf.d/php/php.ini:/usr/local/etc/php/php.ini:ro
       - wordpress:/var/www/html
     restart: always
+    secrets:
+      - mysql_user
+      - mysql_password
     environment:
       - WORDPRESS_DB_HOST=db
-      - WORDPRESS_DB_USER=wp-bp
-      - WORDPRESS_DB_PASSWORD=xeLj7NKMu5VX5zxL4tiO     
       - WORDPRESS_DB_NAME=berkplastik
+      - WORDPRESS_DB_USER_FILE=/run/secrets/mysql_user
+      - WORDPRESS_DB_PASSWORD_FILE=/run/secrets/mysql_password
   webserver:
     image: nginx:latest
     ports:
@@ -46,6 +55,15 @@ services:
       - ./conf.d/certbot/conf/:/etc/letsencrypt/:rw
       - ./conf.d/certbot/log/:/var/log/letsencrypt/:rw
     command: certonly --webroot -w /var/www/certbot --force-renewal --email alperalbayrak@iyte.edu.tr -d berkplastik.francecentral.cloudapp.azure.com --non-interactive --agree-tos
+
+secrets:
+  mysql_root_password:
+     file: .secrets/mysql_root_password.secf
+  mysql_user:
+     file: .secrets/mysql_user.secf
+  mysql_password:
+     file: .secrets/mysql_password.secf
+
 volumes:
   db_data:
   wordpress:

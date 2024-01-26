@@ -1,4 +1,7 @@
 #git ignore config
+#let's Encrpyt TLS config
 conf.d/certbot/conf
 conf.d/certbot/log
 conf.d/certbot/www
+#secrets files
+.secrets
