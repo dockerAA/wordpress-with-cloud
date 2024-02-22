@@ -54,7 +54,7 @@ services:
       - ./conf.d/certbot/www/:/var/www/certbot/:rw
       - ./conf.d/certbot/conf/:/etc/letsencrypt/:rw
       - ./conf.d/certbot/log/:/var/log/letsencrypt/:rw
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email alperalbayrak@iyte.edu.tr -d berkplastik.com.tr --non-interactive --agree-tos
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email alperalbayrak@iyte.edu.tr -d berkplastik.francecentral.cloudapp.azure.com --non-interactive --agree-tos
 
 secrets:
   mysql_root_password:

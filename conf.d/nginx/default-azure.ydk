@@ -5,7 +5,7 @@ server {
     listen 80 default_server;
     listen [::]:80 default_server;
     
-    server_name berkplastik.com.tr;
+    server_name berkplastik.francecentral.cloudapp.azure.com;
 
     server_tokens off;
     
@@ -47,10 +47,10 @@ server {
     
     http2 on;
 
-    server_name berkplastik.com.tr;
+    server_name berkplastik.francecentral.cloudapp.azure.com;
 
-    ssl_certificate /etc/nginx/ssl/live/berkplastik.com.tr/fullchain.pem;
-    ssl_certificate_key /etc/nginx/ssl/live/berkplastik.com.tr/privkey.pem;
+    ssl_certificate /etc/nginx/ssl/live/berkplastik.francecentral.cloudapp.azure.com/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/berkplastik.francecentral.cloudapp.azure.com/privkey.pem;
     
     #location / {
     #	proxy_pass http://[domain-name];
